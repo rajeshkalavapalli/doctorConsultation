@@ -1,30 +1,39 @@
-const express = require('express')
-
+const bcrypt = require('bcrypt')
 const User = require('../schema/userSchema.js')
 
 
 const addUser = async(req,res)=>{
-    const userDtails = req.body;
+    const {name,email,phone,password,role="user"} = req.body;
 
     try{
-        const {email} = userDtails
-        const existingUser = await User.findOne({email:email});
-        if(!existingUser){
-            const newUser = await User.create(userDtails)
-            res.status(201).json({
-                message: "user Sucessfully created",
-                userDetails:newUser
+        
+        const existingUser = await User.findOne({$or:[{phone},{email}]});
+        if(existingUser){
+            res.status(403).json({
+                message:"already registerd please try with new email/mobile"
             })
         }else{
-            res.status(409).json({
-                message:"user already existed please try with new email/mobile",
-                
+            const salt = await bcrypt.genSalt(10)
+            const hashpassword = await bcrypt.hash(password,salt)
+
+
+            const newCreatedUser = new User({
+                name,
+                email,
+                phone,
+                password:hashpassword,
+                role
+            })
+            const finalUser = await newCreatedUser.save()
+            res.status(201).json({
+                message:"usercreated sucessfully",
+                user: finalUser,
             })
         }
 
 
     }catch(error){
-        res.status(400).json({
+        res.status(500).json({
             message:"internal error try after some time",
             error:error,
         })
