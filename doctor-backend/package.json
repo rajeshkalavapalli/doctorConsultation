@@ -1,0 +1,20 @@
+{
+  "name": "doctor-backend",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Rajesh",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+      "dev":"nodemon server.js",
+    "start": " server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.4",
+    "nodemon": "^3.1.11"
+  }
+}
