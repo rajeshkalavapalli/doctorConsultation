@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const User = require('../schema/userSchema.js')
-
+const jwt = require('jsonwebtoken')
 
 const addUser = async(req,res)=>{
     const {name,email,phone,password,role="user"} = req.body;
@@ -9,7 +9,7 @@ const addUser = async(req,res)=>{
         
         const existingUser = await User.findOne({$or:[{phone},{email}]});
         if(existingUser){
-            res.status(403).json({
+           return res.status(403).json({
                 message:"already registerd please try with new email/mobile"
             })
         }else{
@@ -25,15 +25,27 @@ const addUser = async(req,res)=>{
                 role
             })
             const finalUser = await newCreatedUser.save()
-            res.status(201).json({
-                message:"usercreated sucessfully",
-                user: finalUser,
-            })
+            
+             const  isPasswordMatched = await bcrypt.compare(password,finalUser.password )
+        
+        const accessToken = jwt.sign({
+            id:finalUser.id,
+            username:finalUser.name,
+            role:finalUser.role,
+        },process.env.jwt_Secret_key,{expiresIn:"15m"})
+
+        return res.status(201).json({
+            success:true,
+            message:"logged in successfully",
+            accessToken,
+        })
+
         }
+        
 
-
-    }catch(error){
-        res.status(500).json({
+    }
+    catch(error){
+      return   res.status(500).json({
             message:"internal error try after some time",
             error:error,
         })
@@ -56,6 +68,8 @@ const getUser = async(req,res)=>{
             })
         }
 
+
+
     }catch(error){
         res.status(404).json({
             message:"internal issues try after some time",
@@ -63,5 +77,8 @@ const getUser = async(req,res)=>{
         })
     }
 }
+
+
+
 
 module.exports = {addUser,getUser}
