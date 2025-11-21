@@ -3,9 +3,10 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const express = require('express')
 
-const userRoutes = require('./routes/userRouter.js')
 
 const doctorRoutes = require('./routes/doctorRoutes.js')
+
+const userRoutes = require('./routes/userRoutes.js')
 
 const app = express();
 
@@ -29,13 +30,7 @@ connectMONGO()
 app.use(express.json());
 app.use('/api/doctor',doctorRoutes)
 
-
-app.use('/', doctorRoutes)
-
-app.use('/',userRoutes)
-
-
-
+app.use('/api/user', userRoutes)
 
 
 app.listen(PORT,()=>{
