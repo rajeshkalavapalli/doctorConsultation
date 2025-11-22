@@ -1,6 +1,7 @@
 
 require('dotenv').config()
 const mongoose = require('mongoose')
+const cors = require('cors')
 const express = require('express')
 
 
@@ -11,6 +12,7 @@ const userRoutes = require('./routes/userRoutes.js')
 const app = express();
 
 const PORT = process.env.PORT || 5000
+
 
 
 
@@ -26,6 +28,11 @@ const connectMONGO = async()=>{
 }
 
 connectMONGO()
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "GET"],
+}));
 
 app.use(express.json());
 app.use('/api/doctor',doctorRoutes)

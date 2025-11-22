@@ -2,6 +2,9 @@ const express = require('express')
 
 const doctor = require('../schema/doctorsschema')
 
+const { authmiddleware } = require('../middileware/authMiddleware');
+
+
 const allDoctor = async(req,res)=>{
     try{
         const doctors = await doctor.find()
