@@ -1,0 +1,21 @@
+.header1 {
+    background: #BFD5D9; 
+    color: #333; 
+    height: 30px;
+}
+
+.navbutton {
+    background: #60959F; /* professional main green */
+    color: white;
+    margin-top: 1px;
+    height: 90px;
+}
+
+.login{
+    
+    padding-left: 40px;
+    margin-right: 30px;
+    background: #DFEAEC;
+    border-radius: 20px;
+    color: #0D1516;
+}
